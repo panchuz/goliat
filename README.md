@@ -24,16 +24,27 @@ installation:
 
 ### ARGENTINA
 
-REPOSITORIES!!!!
+check /etc/apt/sources.list
 ```
-sudo tee /etc/apt/sources.list << 'EOF'  
-deb http://deb.debian.org/debian trixie main contrib non-free  
-deb http://deb.debian.org/debian-security trixie-security main contrib non-free  
-deb http://deb.debian.org/debian trixie-updates main contrib non-free  
-EOF
+sudo tee /etc/apt/sources.list << 'EOF'
+# Debian Trixie Main
+deb http://deb.debian.org/debian trixie main contrib non-free
+deb-src http://deb.debian.org/debian trixie main contrib non-free
 
-sudo apt update  
-sudo apt install build-essential linux-headers-$(uname -r) dkms  
+# Security Updates
+deb http://deb.debian.org/debian-security trixie-security main contrib non-free
+deb-src http://deb.debian.org/debian-security trixie-security main contrib non-free
+
+# Updates
+deb http://deb.debian.org/debian trixie-updates main contrib non-free
+deb-src http://deb.debian.org/debian trixie-updates main contrib non-free
+EOF
+```
+Add non-free firmware (critical for your hardware):
+```
+sudo tee /etc/apt/sources.list.d/nonfree.list << 'EOF'
+deb http://deb.debian.org/debian trixie non-free-firmware
+EOF
 ```
 
 
@@ -44,7 +55,9 @@ install git
 
 
 ```
-sudo apt install build-essential linux-headers-$(uname -r) git
+sudo apt update
+sudo apt upgrade
+sudo apt install build-essential linux-headers-$(uname -r) git dkms
 git clone https://github.com/panchuz/it87
 cd it87
 sudo make dkms  # Auto-rebuilds on kernel updates :cite[1]
